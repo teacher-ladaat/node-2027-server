@@ -7,6 +7,8 @@ const products = [
 // .json intead of .send
 // כי מקובל שהשרת מחזיר תמיד אוביקט
 export const getAllProducts = (req, res) => {
+    console.log(req.myUser);
+
     const x = req.query.startP;
     if (x) {
         res.json(products.filter(p => p.price >= x));
