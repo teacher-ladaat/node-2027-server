@@ -4,13 +4,15 @@ const products = [
     { id: 3, name: 'cheese', price: 4.5 },
 ];
 
+// .json intead of .send
+// כי מקובל שהשרת מחזיר תמיד אוביקט
 export const getAllProducts = (req, res) => {
     const x = req.query.startP;
     if (x) {
-        res.send(products.filter(p => p.price >= x));
+        res.json(products.filter(p => p.price >= x));
     }
     else {
-        res.send(products);
+        res.json(products);
     }
 };
 
@@ -21,26 +23,26 @@ export const getProductById = (req, res) => {
     const p = products.find(product => product.id === +req.params.idx); // +המרת מחרוזת למספר
 
     if (p) {
-        res.send(p);
+        res.json(p);
     } else {
         // מחזיר סטטוס של שגיאה
-        res.status(404).send('product not found!');
+        res.status(404).json('product not found!');
     }
 };
 
 export const addProduct = (req, res) => {
     products.push(req.body);
-    res.status(201).send(req.body);
+    res.status(201).json(req.body);
 };
 
 export const updateProduct = (req, res) => {
     const index = products.findIndex(p => p.id === +req.params.id);
     products[index] = req.body;
-    res.send(req.body);
+    res.json(req.body);
 };
 
 export const deleteProduct = (req, res) => {
     const index = products.findIndex(p => p.id === +req.params.id);
     products.splice(index, 1); // מחיקת איבר אחד החל מהמקום האינדקס
-    res.status(204).send();
+    res.status(204).json();
 };
