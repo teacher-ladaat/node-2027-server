@@ -45,8 +45,8 @@ app.use(urlencoded({ extended: true }));
 app.use('/client', static_('public'));
 // המידלוואר הנ"ל מבצע את השורות הבאות
 // app.use('/client', (req, res, next) => {
-    // const x = fs.readFileSync('public/...')
-    // res.send(x);
+// const x = fs.readFileSync('public/...')
+// res.send(x);
 // });
 
 // כל הניתובים בשרת
@@ -62,7 +62,11 @@ app.use(URLNotFound);
 app.use(errorHandler);
 
 // 3. הרצת השרת על כתובת מסוימת
-const port = 4000;
+// כך לקחנו את הנתונים מקובץ משתני הסביבה
+// ונתנו ערך ברירת מחדל - אם הקובץ לא קיים
+// בגלל שהוספנו את השורה הבאה בעת ההרצה
+// "start": "node --env-file=.env app.js",
+const port = process.env.PORT ?? 4000;
 app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);
 });
