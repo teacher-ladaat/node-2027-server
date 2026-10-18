@@ -1,5 +1,5 @@
 // 1. ייבוא לאחר התקנה
-import createApp, { json } from 'express';
+import createApp, { json, urlencoded, static as static_ } from 'express';
 import productRouter from './routes/products.router.js';
 import countRouter from './routes/count.router.js';
 import { blockHoursCreator } from './middlewares/demo.middleware.js';
@@ -26,7 +26,19 @@ app.use(blockHoursCreator(8, 22));
 // כך מקבלים את הבאדי
 // חובה לכתוב אותו לפני הניתובים
 // אחרת לא נקבל בהם באדי
+// קבלת באדי כאוביקט
 app.use(json());
+// קבלת באדי מתוך טופס - בשביל העלאת קבצים
+app.use(urlencoded({ extended: true }));
+
+// client-כל הנתיבים שמתחילים ב
+// יחפשו קובץ בשם של המשך הכתובת בתוך התיקיה פבליק
+app.use('/client', static_('public'));
+// המידלוואר הנ"ל מבצע את השורות הבאות
+// app.use('/client', (req, res, next) => {
+    // const x = fs.readFileSync('public/...')
+    // res.send(x);
+// });
 
 // כל הניתובים בשרת
 app.use('/', countRouter);
