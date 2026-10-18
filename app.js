@@ -1,5 +1,7 @@
 // 1. ייבוא לאחר התקנה
 import createApp, { json, urlencoded, static as static_ } from 'express';
+import cors from 'cors';
+
 import productRouter from './routes/products.router.js';
 import countRouter from './routes/count.router.js';
 import { blockHoursCreator } from './middlewares/demo.middleware.js';
@@ -22,6 +24,13 @@ const app = createApp();
 // app.use(block_19_22);
 
 app.use(blockHoursCreator(8, 22));
+
+// פותח הרשאה לכל הקליינטים לגשת לשרת
+app.use(cors());
+// כך מאפשרים גישה לקליינט ספציפי
+// app.use(cors({
+//     origin: 'http://127.0.0.1:5500'
+// }));
 
 // כך מקבלים את הבאדי
 // חובה לכתוב אותו לפני הניתובים
