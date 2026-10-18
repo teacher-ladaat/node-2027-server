@@ -3,6 +3,7 @@ import createApp, { json } from 'express';
 import productRouter from './routes/products.router.js';
 import countRouter from './routes/count.router.js';
 import { blockHoursCreator } from './middlewares/demo.middleware.js';
+import { errorHandler, URLNotFound } from './middlewares/errors.middleware.js';
 // import { blockHours, printHello } from './middlewares/demo.middleware.js';
 
 // 2. יצירת שרת משוכלל
@@ -32,6 +33,12 @@ app.use('/', countRouter);
 // כך נוסיף מידלוואר על כל הראוטר
 // app.use('/products', printHello, printHello, productRouter);
 app.use('/products', productRouter);
+
+app.use(URLNotFound);
+
+// כל השגיאות ייזרקו לכאן
+// catch כמו
+app.use(errorHandler);
 
 // 3. הרצת השרת על כתובת מסוימת
 const port = 4000;

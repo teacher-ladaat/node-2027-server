@@ -45,7 +45,8 @@ export const blockHoursCreator = (fromHour = 0, toHour = 23) => {
         if (now.getHours() >= fromHour && now.getHours() <= toHour) {
             next();
         } else {
-            res.status(500).json({ error: `Server is sleeping at ${now.getHours()}!` });
+            next({ msg: `Server is sleeping at ${now.getHours()}!`, type: 'block-server' })
+            // res.status(500).json({ error: `Server is sleeping at ${now.getHours()}!` });
         }
     };
 
