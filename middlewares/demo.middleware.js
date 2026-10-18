@@ -28,18 +28,26 @@ export const isAdmin = (req, res, next) => {
 */
 
 
-/**
- * חסימת השרת בשעות מסוימות
- * יהיה פתוח רק בין 8 ל-20
- * @param {import("express").Request} req בקשה
- * @param {import("express").Response} res תגובה
- * @param {import("express").NextFunction} next פונקציה שמעבירה הלאה
- */
-export const blockHours = (req, res, next) => {
-    const now = new Date();
-    if (now.getHours() >= 8 && now.getHours() <= 20) {
-        next();
-    } else {
-        res.status(500).json({ error: `Server is sleeping at ${now.getHours()}!`});
-    }
+// middleware creator - פונקציה שיוצרת מידלוואר
+// ומחזירה אותו
+// ?איך נפעיל אותה
+// נזמן את המידלוואר קריאטור ונשלח את הפרמטרים הרלוונטיים בסוגריים
+export const blockHoursCreator = (fromHour = 0, toHour = 23) => {
+    /**
+     * חסימת השרת בשעות מסוימות
+     * יהיה פתוח רק בין השעות שנשלחו
+     * @param {import("express").Request} req בקשה
+     * @param {import("express").Response} res תגובה
+     * @param {import("express").NextFunction} next פונקציה שמעבירה הלאה
+     */
+    const mdl = (req, res, next) => {
+        const now = new Date();
+        if (now.getHours() >= fromHour && now.getHours() <= toHour) {
+            next();
+        } else {
+            res.status(500).json({ error: `Server is sleeping at ${now.getHours()}!` });
+        }
+    };
+
+    return mdl;
 };

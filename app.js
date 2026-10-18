@@ -2,7 +2,8 @@
 import createApp, { json } from 'express';
 import productRouter from './routes/products.router.js';
 import countRouter from './routes/count.router.js';
-import { blockHours, printHello } from './middlewares/demo.middleware.js';
+import { blockHoursCreator } from './middlewares/demo.middleware.js';
+// import { blockHours, printHello } from './middlewares/demo.middleware.js';
 
 // 2. יצירת שרת משוכלל
 const app = createApp();
@@ -12,7 +13,14 @@ const app = createApp();
 // יש חשיבות לסדר השליחה למידלוואר
 // app.use(printHello);
 
-app.use(blockHours);
+// 1. יצירת מידלוואר לפי פרמטרים
+// const block_8_20 = blockHoursCreator(8, 20);
+// const block_19_22 = blockHoursCreator(19, 22); 
+
+// 2. app.use-שליחת המידלוואר שחזר ל
+// app.use(block_19_22);
+
+app.use(blockHoursCreator(8, 22));
 
 // כך מקבלים את הבאדי
 // חובה לכתוב אותו לפני הניתובים
