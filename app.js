@@ -2,7 +2,7 @@
 import createApp, { json } from 'express';
 import productRouter from './routes/products.router.js';
 import countRouter from './routes/count.router.js';
-import { printHello } from './middlewares/demo.middleware.js';
+import { blockHours, printHello } from './middlewares/demo.middleware.js';
 
 // 2. יצירת שרת משוכלל
 const app = createApp();
@@ -11,6 +11,8 @@ const app = createApp();
 // כל פעולה תיגש קודם כל לכאן
 // יש חשיבות לסדר השליחה למידלוואר
 // app.use(printHello);
+
+app.use(blockHours);
 
 // כך מקבלים את הבאדי
 // חובה לכתוב אותו לפני הניתובים
