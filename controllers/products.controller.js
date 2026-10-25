@@ -1,3 +1,5 @@
+import { newProductSchame } from "../validations/product.validation.js";
+
 const products = [
     { id: 1, name: 'milk', price: 5 },
     { id: 2, name: 'bread', price: 3 },
@@ -36,11 +38,16 @@ export const getProductById = (req, res, next) => {
 };
 
 export const addProduct = (req, res, next) => {
-    if (!req.body.name || !req.body.price || !req.body.id)
-        return next({ status: 409, msg: 'invalid body' });
+    const { value, error } = newProductSchame.validate(req.body);
 
-    products.push(req.body);
-    res.status(201).json(req.body);
+    if (error)
+        return next({ status: 409, msg: error });
+    else {
+        req.body = value;
+        req.body.id = Date.now();
+        products.push(req.body);
+        return res.status(201).json(req.body);
+    }
 };
 
 export const updateProduct = (req, res, next) => {
