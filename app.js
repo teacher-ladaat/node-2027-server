@@ -3,6 +3,7 @@ import createApp, { json, urlencoded, static as static_ } from 'express';
 import cors from 'cors';
 
 import productRouter from './routes/products.router.js';
+import userRouter from './routes/users.router.js';
 import countRouter from './routes/count.router.js';
 import { blockHoursCreator } from './middlewares/demo.middleware.js';
 import { errorHandler, URLNotFound } from './middlewares/errors.middleware.js';
@@ -54,6 +55,8 @@ app.use('/', countRouter);
 // כך נוסיף מידלוואר על כל הראוטר
 // app.use('/products', printHello, printHello, productRouter);
 app.use('/products', productRouter);
+
+app.use('/users', userRouter);
 
 app.use(URLNotFound);
 
