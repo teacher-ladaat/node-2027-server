@@ -1,3 +1,4 @@
+import Product from "../models/product.model.js";
 import { newProductSchame } from "../validations/product.validation.js";
 
 const products = [
@@ -6,47 +7,42 @@ const products = [
     { id: 3, name: 'cheese', price: 4.5 },
 ];
 
-// .json intead of .send
-// כי מקובל שהשרת מחזיר תמיד אוביקט
-export const getAllProducts = (req, res, next) => {
-    console.log(req.myUser);
-
-    const x = req.query.startP;
-    if (x) {
-        res.json(products.filter(p => p.price >= x));
-    }
-    else {
-        res.json(products);
+// pagintation, sort
+export const getAllProducts = async (req, res, next) => {
+    try {
+        const products = await Product.find();
+        return res.json(products);
+    } catch (error) {
+        next({});
     }
 };
 
-export const getProductById = (req, res, next) => {
-    // console.log(req.params); // כך נקבל את הפרמטרים שנשלחו כאוביקט
-    // הערכים מתקבלים כמחרוזות
-
-    const p = products.find(product => product.id === +req.params.idx); // +המרת מחרוזת למספר
-
-    if (p) {
-        res.json(p);
-    } else {
-        // מחזיר סטטוס של שגיאה
-        // res.status(404).json('product not found!');
-
-        // במקום השורה שלעיל נשלח תמיד דרך הנקסט למידלוואר של השגיאות
-        next({ status: 404, msg: `product ${req.params.idx} not found!`, type: 'resource-not-found' });
+export const getProductById = async (req, res, next) => {
+    try {
+        const p = await Product.findById(req.params.idx);
+        if (p) {
+            res.json(p);
+        } else {
+            next({ status: 404, msg: `product ${req.params.idx} not found!`, type: 'resource-not-found' });
+        }
+    } catch (error) {
+        next({});
     }
 };
 
-export const addProduct = (req, res, next) => {
-    const { value, error } = newProductSchame.validate(req.body);
+export const addProduct = async (req, res, next) => {
+    try {
+        const { value, error } = newProductSchame.validate(req.body);
 
-    if (error)
-        return next({ status: 409, msg: error });
-    else {
-        req.body = value;
-        req.body.id = Date.now();
-        products.push(req.body);
-        return res.status(201).json(req.body);
+        if (error)
+            return next({ status: 409, msg: error });
+        else {
+            const newP = new Product(value); // מותר כי כבר בדקנו שהנתונים תקינים
+            await newP.save();
+            return res.status(201).json(newP);
+        }
+    } catch (error) {
+        next({});
     }
 };
 

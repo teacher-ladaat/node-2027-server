@@ -7,10 +7,13 @@ import userRouter from './routes/users.router.js';
 import countRouter from './routes/count.router.js';
 import { blockHoursCreator } from './middlewares/demo.middleware.js';
 import { errorHandler, URLNotFound } from './middlewares/errors.middleware.js';
+import { connectDB } from './config/db.js';
 // import { blockHours, printHello } from './middlewares/demo.middleware.js';
 
 // 2. יצירת שרת משוכלל
 const app = createApp();
+
+connectDB();
 
 // app.use - הגדרות על כל השרת
 // כל פעולה תיגש קודם כל לכאן
