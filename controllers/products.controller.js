@@ -1,3 +1,4 @@
+import { isValidObjectId } from "mongoose";
 import Product from "../models/product.model.js";
 import { newProductSchame } from "../validations/product.validation.js";
 
@@ -57,13 +58,26 @@ export const updateProduct = (req, res, next) => {
     res.json(req.body);
 };
 
-export const deleteProduct = (req, res, next) => {
-    const index = products.findIndex(p => p.id === +req.params.id);
+export const deleteProduct = async (req, res, next) => {
+    const { id } = req.params;
+    try {
+        // תמיד נבדוק קודם חוקיות של איי-די
+        // ורק אח"כ נחפש לפיו
+        // catch-אחרת מונגו יזרוק שגיאה ל
+        if (!isValidObjectId(id)) {
+            return next({ status: 404, msg: `product ${id} is not found!`, type: 'resource-not-found' });
+        }
 
-    if (index === -1) {
-        return next({ status: 404, msg: `product ${req.params.idx} not found!`, type: 'resource-not-found' });
+        // לא מחזיר שגיאה עבור מוצר לא קיים
+        const p = await Product.findByIdAndDelete(id);
+
+        if (!p) {
+            return next({ status: 404, msg: `product ${id} is not found!`, type: 'resource-not-found' });
+        }
+
+        // 204 - הצלחה ללא תוכן
+        return res.status(204).json();
+    } catch (error) {
+        next({});
     }
-
-    products.splice(index, 1); // מחיקת איבר אחד החל מהמקום האינדקס
-    res.status(204).json();
 };
