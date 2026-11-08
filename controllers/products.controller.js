@@ -88,7 +88,7 @@ export const updateProduct = async (req, res, next) => {
 
         const p = await Product.findByIdAndUpdate(id, // 1. תנאי
             { $set: req.body }, // 2. מה לעדכן במסמך
-            { returnDocument: 'after' }  // 3. הגדרות נוספות - למשל החזרת האוביקט המעודכן
+            { returnDocument: 'after', runValidators: true }  // 3. הגדרות נוספות - למשל החזרת האוביקט המעודכן, הפעלת בדיקות בעת עדכון
             // { new: true } // כנ"ל בדרך ישנה יותר
         );
 

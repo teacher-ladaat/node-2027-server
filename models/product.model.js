@@ -1,10 +1,14 @@
 import { model, Schema } from "mongoose";
 
+// בדיקות תקינות אלו נבדקות בעת הוספה/עדכון לדטהבייס
 const productSchema = new Schema({
     // _id - אם לא כותבים נוצר אוטומטית
-    name: String,
+    name: {
+        type: String,
+        /* required: true, minlength: 2, unique: true*/ // כאן אפשר ליצור בדיקות תקינות נוספות בתוך האוביקט
+    },
     price: Number,
-    amount: Number,
+    amount: { type: Number, min: 0 },
     categories: [String], // מערך מחרוזות
 });
 
