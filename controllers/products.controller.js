@@ -47,7 +47,44 @@ export const addProduct = async (req, res, next) => {
     }
 };
 
-export const updateProduct = (req, res, next) => {
+export const updateProduct = async (req, res, next) => {
+    const { id } = req.params;
+
+    try {
+        // עדכון אוביקט במונגו
+        // 1. עדכון/הוספת שדה, שינוי ערך = $set
+        // 2. מחיקת שדה = $unset
+        // 3. שינוי שם לשדה - $rename
+        // 4. הוספה/מחיקה ממערך
+        /*
+        Product.findByIdAndUpdate(id, {
+            $set: { price: 100 },
+            $unset: { name: true },
+            $rename: { categories: 'category' },
+            $push: { categories: ['aaa', 'bbb'] }, // הוספה עם כפולים
+            $addToSet: { categories: ['aaa', 'bbb'] }, // הוספה ללא כפולים
+        });
+        */
+
+        if (!isValidObjectId(id)) {
+            return next({ status: 404, msg: `product ${id} is not found!`, type: 'resource-not-found' });
+        }
+
+        const p = await Product.findByIdAndUpdate(id, // 1. תנאי
+            { $set: req.body }, // 2. מה לעדכן במסמך
+            { returnDocument: 'after' }  // 3. הגדרות נוספות - למשל החזרת האוביקט המעודכן
+            // { new: true } // כנ"ל בדרך ישנה יותר
+        );
+
+        if (!p) {
+            return next({ status: 404, msg: `product ${id} is not found!`, type: 'resource-not-found' });
+        }
+
+        return res.json(p);
+    } catch (error) {
+        next({});
+    }
+
     const index = products.findIndex(p => p.id === +req.params.id);
 
     if (index === -1) {
