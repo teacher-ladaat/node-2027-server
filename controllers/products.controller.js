@@ -2,12 +2,6 @@ import { isValidObjectId } from "mongoose";
 import Product from "../models/product.model.js";
 import { newProductSchame } from "../validations/product.validation.js";
 
-const products = [
-    { id: 1, name: 'milk', price: 5 },
-    { id: 2, name: 'bread', price: 3 },
-    { id: 3, name: 'cheese', price: 4.5 },
-];
-
 // pagintation, sort
 export const getAllProducts = async (req, res, next) => {
     try {
