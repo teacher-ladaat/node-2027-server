@@ -5,8 +5,30 @@ import { newProductSchame } from "../validations/product.validation.js";
 // pagintation, sort
 export const getAllProducts = async (req, res, next) => {
     try {
-        const products = await Product.find();
-        return res.json(products);
+        //#region דוגמאות לשאילתות
+        // const products = await Product.find({ name: "milk", price: 10 }); // כל המוצרים שהשם שלהם "חלב" והמחיר שווה לעשר
+        // const products = await Product.find({ price: { $gte: 10, $lt: 50 } }); // כל המוצרים שמחירם גדול/שווה עשר וגם קטן מחמישים
+        // const products = await Product.find({
+        //     $or: [
+        //         { price: { $gte: 10 } },
+        //         { price: { $lt: 50 } },
+        //         { name: /^a/i }, // LIKE 'a%' or 'A%'
+        //         { name: /a$/i }, // LIKE '%a' or '%A'
+        //         { name: /a/i }, // LIKE '%a%' or '%A%'
+        //     ]
+        // }); // כל המוצרים שמחירם גדול/שווה עשר או קטן מחמישים
+        //#endregion
+
+        const { page = 1, limit = 5 } = req.query; // ?...
+
+        const products = await Product.find() // כל המוצרים
+            .skip((page - 1) * limit) // כמה תדלג
+            .limit(limit); // כמה תביא לכל היותר
+
+        const total = await Product.countDocuments();
+
+        // תמיד כשעושים עימוד, מחזירים גם סה"כ כמה מוצרים יש
+        return res.json({ data: products, total });
     } catch (error) {
         next({});
     }
