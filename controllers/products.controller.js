@@ -1,6 +1,6 @@
 import { isValidObjectId } from "mongoose";
 import Product from "../models/product.model.js";
-import { newProductSchame } from "../validations/product.validation.js";
+import { newProductScheme } from "../validations/product.validation.js";
 
 // pagintation, sort
 export const getAllProducts = async (req, res, next) => {
@@ -49,7 +49,7 @@ export const getProductById = async (req, res, next) => {
 
 export const addProduct = async (req, res, next) => {
     try {
-        const { value, error } = newProductSchame.validate(req.body);
+        const { value, error } = newProductScheme.validate(req.body);
 
         if (error)
             return next({ status: 409, msg: error });

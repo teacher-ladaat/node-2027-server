@@ -7,6 +7,8 @@
  * @param {import("express").NextFunction} next פונקציה שמעבירה הלאה
  */
 export const errorHandler = (err, req, res, next) => {
+    console.log(err);
+    
     const st = err.status ?? 500;
     const myError = {
         message: err.msg ?? 'Server Error',

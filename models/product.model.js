@@ -8,10 +8,11 @@ const productSchema = new Schema({
     // _id - אם לא כותבים נוצר אוטומטית
     name: {
         type: String,
-        /* required: true, minlength: 2, unique: true*/ // כאן אפשר ליצור בדיקות תקינות נוספות בתוך האוביקט
+        /* required: true, minlength: 2, unique: true */ // כאן אפשר ליצור בדיקות תקינות נוספות בתוך האוביקט
     },
     price: Number,
     amount: { type: Number, min: 0 },
+    imgUrl: String,
     categories: [String], // מערך מחרוזות
 });
 
