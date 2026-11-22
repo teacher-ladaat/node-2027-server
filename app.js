@@ -3,13 +3,18 @@ import createApp, { json, urlencoded, static as static_ } from 'express';
 import cors from 'cors';
 
 import productRouter from './routes/products.router.js';
+import orderRouter from './routes/orders.router.js';
+import userRouter from './routes/users.router.js';
 import countRouter from './routes/count.router.js';
 import { blockHoursCreator } from './middlewares/demo.middleware.js';
 import { errorHandler, URLNotFound } from './middlewares/errors.middleware.js';
+import { connectDB } from './config/db.js';
 // import { blockHours, printHello } from './middlewares/demo.middleware.js';
 
 // 2. יצירת שרת משוכלל
 const app = createApp();
+
+connectDB();
 
 // app.use - הגדרות על כל השרת
 // כל פעולה תיגש קודם כל לכאן
@@ -54,6 +59,10 @@ app.use('/', countRouter);
 // כך נוסיף מידלוואר על כל הראוטר
 // app.use('/products', printHello, printHello, productRouter);
 app.use('/products', productRouter);
+
+app.use('/orders', orderRouter);
+
+app.use('/users', userRouter);
 
 app.use(URLNotFound);
 
